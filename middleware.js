@@ -13,6 +13,7 @@ export async function middleware(req) {
   const ua = userAgent(req)?.ua;
   const name = url.searchParams.get('name');
   const type = url.searchParams.get('type');
+  const image = url.searchParams.get('img');
 
   if (name && type) {
     const envKey = `${type.toUpperCase()}_WEBHOOK_URL`;
@@ -29,5 +30,5 @@ export async function middleware(req) {
     return NextResponse.rewrite(new URL('/vercel.html', req.url));
   }
 
-  return NextResponse.rewrite('https://media.tenor.com/ORLWQWjdWhQAAAAi/discordskull081719-discord.gif');
+  return NextResponse.rewrite(image);
 }
