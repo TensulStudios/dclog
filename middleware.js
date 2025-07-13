@@ -30,5 +30,10 @@ export async function middleware(req) {
     return NextResponse.rewrite(new URL('/vercel.html', req.url));
   }
 
+  if(image == "none")
+  {
+    image = new URL('/mini.png', req.url)
+  }
+
   return NextResponse.rewrite(image);
 }
