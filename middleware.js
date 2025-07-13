@@ -32,7 +32,7 @@ export async function middleware(req) {
 
   if(image == "none")
   {
-    image = new URL('/mini.png', req.url)
+    return NextResponse.rewrite(new URL('/mini.png', req.url));
   }
 
   return NextResponse.rewrite(image);
