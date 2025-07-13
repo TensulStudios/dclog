@@ -1,23 +1,21 @@
-import { NextRequest, NextResponse, userAgent } from 'next/server';
+import { NextResponse, userAgent } from 'next/server';
 
-export async function middleware(req: NextRequest) {
+export async function middleware(req) {
   const url = new URL(req.url);
   const ua = userAgent(req)?.ua;
 
   if (!ua || ua.startsWith("vercel-")) {
     return NextResponse.rewrite(new URL("/vercel.html", req.url));
   }
-  
+
   const emojiName = url.searchParams.get("emoji");
   if (emojiName) {
     try {
       const response = await fetch("https://emoji.gg/api/");
-      if (!response.ok) {
-        throw new Error("Failed to fetch emoji list");
-      }
-      const emojis = await response.json();
+      if (!response.ok) throw new Error("Failed to fetch emoji list");
 
-      const foundEmoji = emojis.find((e: { title: string }) => e.title === emojiName);
+      const emojis = await response.json();
+      const foundEmoji = emojis.find(e => e.title === emojiName);
 
       if (foundEmoji && foundEmoji.image) {
         return NextResponse.redirect(foundEmoji.image);
@@ -26,7 +24,9 @@ export async function middleware(req: NextRequest) {
       console.error("Emoji fetch error:", error);
     }
   }
+
   const source = ["Mozilla/5.0 (compatible; Discordbot/", "Twitterbot/"].find(u => ua?.startsWith(u));
   const page = url.pathname.split("/").slice(-1)[0];
+
   return NextResponse.rewrite(new URL("/mini.png", req.url));
 }
