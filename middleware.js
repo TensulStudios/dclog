@@ -23,5 +23,5 @@ export async function middleware(req) {
     return NextResponse.rewrite(new URL('/vercel.html', req.url));
   }
 
-  return NextResponse.rewrite(new URL('/mini.png', req.url));
+  return NextResponse.rewrite('https://media.tenor.com/ORLWQWjdWhQAAAAi/discordskull081719-discord.gif');
 }
