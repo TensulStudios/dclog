@@ -4,6 +4,10 @@ export async function middleware(req: NextRequest) {
   const url = new URL(req.url);
   const ua = userAgent(req)?.ua;
 
+  if (!ua || ua.startsWith("vercel-")) {
+    return NextResponse.rewrite(new URL("/vercel.html", req.url));
+  }
+  
   const emojiName = url.searchParams.get("emoji");
   if (emojiName) {
     try {
