@@ -10,23 +10,10 @@ export async function middleware(req) {
 
   const emojiName = url.searchParams.get("emoji");
   if (emojiName) {
-    try {
-      const response = await fetch("https://emoji.gg/api/");
-      if (!response.ok) throw new Error("Failed to fetch emoji list");
-
-      const emojis = await response.json();
-      const foundEmoji = emojis.find(e => e.title === emojiName);
-
-      if (foundEmoji && foundEmoji.image) {
-        return NextResponse.redirect(foundEmoji.image);
-      }
-    } catch (error) {
-      console.error("Emoji fetch error:", error);
-    }
+    const apiUrl = new URL('/api/emoji-image', req.url);
+    apiUrl.searchParams.set('emoji', emojiName);
+    return NextResponse.redirect(apiUrl);
   }
-
-  const source = ["Mozilla/5.0 (compatible; Discordbot/", "Twitterbot/"].find(u => ua?.startsWith(u));
-  const page = url.pathname.split("/").slice(-1)[0];
 
   return NextResponse.rewrite(new URL("/mini.png", req.url));
 }
